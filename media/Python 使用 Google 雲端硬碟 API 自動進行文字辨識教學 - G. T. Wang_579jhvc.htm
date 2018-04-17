@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<!-- saved from url=(0083)https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/ -->
+<html class="js" lang="zh-TW" prefix="og: http://ogp.me/ns#"><head profile="http://gmpg.org/xfn/11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang</title>
+<script id="facebook-jssdk" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/sdk.js"></script><script async="" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/analytics.js"></script><script>document.documentElement.className = document.documentElement.className.replace("no-js","js");</script>
+
+<!-- This site is optimized with the Yoast SEO plugin v7.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/">
+<link rel="publisher" href="https://plus.google.com/+SealmemoryBlogspotTwMain/about">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang">
+<meta property="og:description" content="這裡示範如何在 Python 中使用 Google 雲端硬碟 API，自動上傳圖片、進行文字辨識、下載結果。  …">
+<meta property="og:url" content="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/">
+<meta property="og:site_name" content="G. T. Wang">
+<meta property="article:publisher" content="https://www.facebook.com/G-T-Wang-489529864441673/">
+<meta property="article:tag" content="Google">
+<meta property="article:tag" content="OCR">
+<meta property="article:tag" content="Python">
+<meta property="article:section" content="程式設計">
+<meta property="article:published_time" content="2018-03-02T14:58:05+00:00">
+<meta property="article:modified_time" content="2018-03-04T13:29:42+00:00">
+<meta property="og:updated_time" content="2018-03-04T13:29:42+00:00">
+<meta property="og:image" content="https://blog.gtwang.org/wp-content/uploads/2018/02/bundle-20180302-1.jpg">
+<meta property="og:image:secure_url" content="https://blog.gtwang.org/wp-content/uploads/2018/02/bundle-20180302-1.jpg">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<!-- / Yoast SEO plugin. -->
+
+<link rel="amphtml" href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/amp/"><link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="訂閱 G. T. Wang »" href="https://blog.gtwang.org/feed/">
+<link rel="alternate" type="application/rss+xml" title="訂閱 G. T. Wang » 迴響" href="https://blog.gtwang.org/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="訂閱 G. T. Wang » Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 迴響" href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/feed/">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.gtwang.org\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.5"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/wp-emoji-release.min.js" type="text/javascript" defer=""></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="rowling_fontawesome-css" href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/font-awesome.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="rowling_style_fa-css" href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/style.min.css" type="text/css" media="all">
+<script type="text/javascript" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/jquery.js"></script>
+<script type="text/javascript" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/picturefill.min.js"></script>
+<link rel="https://api.w.org/" href="https://blog.gtwang.org/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://blog.gtwang.org/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://blog.gtwang.org/wp-includes/wlwmanifest.xml"> 
+<meta name="generator" content="WordPress 4.9.5">
+<link rel="shortlink" href="https://blog.gtwang.org/?p=38768">
+<link rel="alternate" type="application/json+oembed" href="https://blog.gtwang.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.gtwang.org%2Fprogramming%2Fautomation-of-google-ocr-using-python-tutorial%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://blog.gtwang.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.gtwang.org%2Fprogramming%2Fautomation-of-google-ocr-using-python-tutorial%2F&amp;format=xml">
+<!-- Customizer CSS --> 
+<style type="text/css">
+
+
+
+
+
+
+
+
+
+</style> 
+<!--/Customizer CSS-->
+      
+<!-- Begin: Adsense -->
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- End: Adsense -->
+
+<!-- Begin: A/B Testing -->
+<script type="text/javascript">
+/* js.cookie */
+!function(e){if("function"==typeof define&&define.amd)define(e);else if("object"==typeof exports)module.exports=e();else{var n=window.Cookies,o=window.Cookies=e();o.noConflict=function(){return window.Cookies=n,o}}}(function(){function e(){for(var e=0,n={};e<arguments.length;e++){var o=arguments[e];for(var t in o)n[t]=o[t]}return n}function n(o){function t(n,i,r){var c;if("undefined"!=typeof document){if(arguments.length>1){if(r=e({path:"/"},t.defaults,r),"number"==typeof r.expires){var s=new Date;s.setMilliseconds(s.getMilliseconds()+864e5*r.expires),r.expires=s}try{c=JSON.stringify(i),/^[\{\[]/.test(c)&&(i=c)}catch(a){}return i=o.write?o.write(i,n):encodeURIComponent(String(i)).replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g,decodeURIComponent),n=encodeURIComponent(String(n)),n=n.replace(/%(23|24|26|2B|5E|60|7C)/g,decodeURIComponent),n=n.replace(/[\(\)]/g,escape),document.cookie=[n,"=",i,r.expires&&"; expires="+r.expires.toUTCString(),r.path&&"; path="+r.path,r.domain&&"; domain="+r.domain,r.secure?"; secure":""].join("")}n||(c={});for(var p=document.cookie?document.cookie.split("; "):[],d=/(%[0-9A-Z]{2})+/g,f=0;f<p.length;f++){var u=p[f].split("="),l=u[0].replace(d,decodeURIComponent),m=u.slice(1).join("=");'"'===m.charAt(0)&&(m=m.slice(1,-1));try{if(m=o.read?o.read(m,l):o(m,l)||m.replace(d,decodeURIComponent),this.json)try{m=JSON.parse(m)}catch(a){}if(n===l){c=m;break}n||(c[l]=m)}catch(a){}}return c}}return t.set=t,t.get=function(e){return t(e)},t.getJSON=function(){return t.apply({json:!0},[].slice.call(arguments))},t.defaults={},t.remove=function(n,o){t(n,"",e(o,{expires:-1}))},t.withConverter=n,t}return n(function(){})});
+
+function initABTesting() {
+  var ab = {};
+  ab.channel = Cookies.get('abtesting.channel', { domain: 'blog.gtwang.org' });
+
+  if (typeof ab.channel === "undefined") {
+    var random_number = Math.random();
+    if (random_number < .5){
+      ab.channel = 'a';
+    } else {
+      ab.channel = 'b';
+    }
+    Cookies.set('abtesting.channel', ab.channel, { domain: 'blog.gtwang.org', expires: 7 });
+  }
+
+/*
+GTWang Blog 測試 A: 3586196931
+GTWang Blog 測試 B: 5062930138
+GTWang Blog 測試 C: 4729996133
+*/
+
+  switch(ab.channel) {
+  case 'a':
+    ab.adsenseChannel = '3586196931';
+    break;
+  case 'b':
+    ab.adsenseChannel = '5062930138';
+	  /* jQuery("<style>.post-content a {color:#111;text-decoration:underline;}</style>").appendTo("head"); */
+    break;
+  }
+  return ab;
+}
+var ABTesting = initABTesting();
+</script>
+<!-- End: A/B Testing -->
+
+<!-- Begin: Google DFP --><!--
+<script type='text/javascript'>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+  (function() {
+    var gads = document.createElement('script');
+    gads.async = true;
+    gads.type = 'text/javascript';
+    var useSSL = 'https:' == document.location.protocol;
+    gads.src = (useSSL ? 'https:' : 'http:') +
+      '//www.googletagservices.com/tag/js/gpt.js';
+    var node = document.getElementsByTagName('script')[0];
+    node.parentNode.insertBefore(gads, node);
+  })();
+</script>
+
+<script type='text/javascript'>
+googletag.cmd.push(function() {
+  /*
+  var mapping1 = googletag.sizeMapping().
+      addSize([0, 0], [320, 50]).
+	  addSize([280, 250], [250, 250]).
+      addSize([340, 200], [300, 250]).  // Tablet
+      addSize([1050, 200], [336, 280]). // Desktop
+	  build();
+
+  var mapping3 = googletag.sizeMapping().
+      addSize([0, 0], []).
+      addSize([728, 200], [160, 600]).
+      build();
+
+  var mapping2 = googletag.sizeMapping().
+    addSize([0, 0], []).
+    addSize([836, 200], [336, 280]). // Tablet
+    addSize([1220, 200], [728, 90]). // Desktop
+    build();
+*/
+  var mapping4 = googletag.sizeMapping().
+    addSize([0, 0], []).
+    addSize([850, 200], [468, 60]).
+    addSize([960, 200], [728, 90]).
+    addSize([1230, 200], [970, 90]).
+    build();
+/*
+  var mapping5 = googletag.sizeMapping().
+    addSize([0, 0], []).
+    addSize([850, 200], [728, 90]).
+    addSize([1070, 200], [970, 90]).
+    build();
+
+  googletag.defineSlot('/54009424/gtwang-post-bottom-1', [336, 280], 'div-gpt-ad-1432250578318-0').
+    defineSizeMapping(mapping1).
+	addService(googletag.pubads());
+	
+
+  googletag.defineSlot('/54009424/gtwang-bottom-1', [[336, 280], [728, 90]], 'div-gpt-ad-1432250578318-1').
+    defineSizeMapping(mapping2).
+    addService(googletag.pubads());
+
+    googletag.defineSlot('/54009424/gtwang-post-sidebar-1', [160, 600], 'div-gpt-ad-1432250578318-2').
+    defineSizeMapping(mapping3).
+    addService(googletag.pubads());
+
+    googletag.defineSlot('/54009424/gtwang-homepage-1', [336, 280], 'div-gpt-ad-1432250578318-3').
+    addService(googletag.pubads());
+
+    googletag.defineSlot('/54009424/gtwang-post-bottom-2', [336, 280], 'div-gpt-ad-1432250578318-4').
+    defineSizeMapping(mapping1).
+    addService(googletag.pubads());
+*/
+  googletag.defineSlot('/54009424/gtwang-top-1', [[728, 90], [234, 60], [468, 60], [970, 90]], 'div-gpt-ad-1432250578318-5').
+    defineSizeMapping(mapping4).
+    addService(googletag.pubads());
+/*
+  googletag.defineSlot('/54009424/gtwang-bottom-2', [[468, 60], [970, 90], [728, 90]], 'div-gpt-ad-1432250578318-6').
+    defineSizeMapping(mapping5).
+    addService(googletag.pubads());
+*/
+  googletag.pubads().enableSingleRequest();
+  googletag.pubads().collapseEmptyDivs();
+  
+  // For A/B Testing
+  googletag.pubads().setTargeting('ab_testing', ABTesting.channel);
+  
+  googletag.enableServices();
+});
+</script>-->
+<!-- End: Google DFP -->
+<!-- Begin: Google 網頁層級廣告 -->
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+  google_ad_client: "ca-pub-7794009487786811",
+  enable_page_level_ads: true
+});
+</script>
+<!-- End: Google 網頁層級廣告 -->
+<!-- End: Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-50330039-2', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End: Google Analytics -->
+
+<!-- Begin: theme-color in Chrome -->
+<!--<meta name="theme-color" content="#3498df">-->
+<meta name="theme-color" content="#2880BF">
+<!-- End: theme-color in Chrome -->
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="https://blog.gtwang.org/favicon.ico" sizes="16x16">
+<link rel="icon" href="https://blog.gtwang.org/gtwang-logo-16x16.png" type="image/png" sizes="16x16">
+<link rel="icon" href="https://blog.gtwang.org/gtwang-logo-48x48.png" type="image/png" sizes="48x48">
+<link rel="icon" href="https://blog.gtwang.org/gtwang-logo-64x64.png" type="image/png" sizes="64x64">
+<link rel="icon" href="https://blog.gtwang.org/gtwang-logo-96x96.png" type="image/png" sizes="96x96">
+<link rel="icon" href="https://blog.gtwang.org/gtwang-logo-128x128.png" type="image/png" sizes="128x128">
+<link rel="icon" href="https://blog.gtwang.org/gtwang-logo-192x192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" sizes="57x57" href="https://blog.gtwang.org/apple-touch-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="76x76" href="https://blog.gtwang.org/apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="120x120" href="https://blog.gtwang.org/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://blog.gtwang.org/apple-touch-icon-152x152.png">
+<!-- Begin: Smooth Jazz Ad -->
+<link href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/css" rel="stylesheet" type="text/css">
+<!-- End: Smooth Jazz Ad -->
+	<script src="chrome-extension://jhffgcfmcckgmioipfnmbannkpncfipo/util.js"></script><script src="chrome-extension://jhffgcfmcckgmioipfnmbannkpncfipo/pagejs.js"></script><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:25px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:15px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:19px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:13px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:13px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:17px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}
+.fb_customer_chat_bounce_in{animation-duration:250ms;animation-name:fb_bounce_in}.fb_customer_chat_bounce_out{animation-duration:250ms;animation-name:fb_fade_out}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_mobile_overlay_active{background-color:#fff;height:100%;overflow:hidden;position:fixed;visibility:hidden;width:100%}@keyframes fb_fade_out{from{opacity:1}to{opacity:0}}@keyframes fb_bounce_in{0%{opacity:0;transform:scale(.8, .8);transform-origin:100% 100%}10%{opacity:.1}20%{opacity:.2}30%{opacity:.3}40%{opacity:.4}50%{opacity:.5}60%{opacity:.6}70%{opacity:.7}80%{opacity:.8;transform:scale(1.03, 1.03)}90{opacity:.9}100%{opacity:1;transform:scale(1, 1)}}</style></head>
+	
+	<body class="post-template-default single single-post postid-38768 single-format-standard has-featured-image">
+
+				
+			<div class="top-nav">
+				
+				<div class="section-inner">
+					
+					<ul class="secondary-menu">
+						
+						<li id="menu-item-5704" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5704"><a href="http://blogger.gtwang.org/">Blogger 舊站</a></li>
+<li id="menu-item-6167" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6167"><a href="https://blog.gtwang.org/about/">關於</a></li>
+															
+					</ul> <!-- /secondary-menu -->
+				
+					<ul class="social-menu">
+						
+						<li id="menu-item-5250" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5250"><a href="https://plus.google.com/+SealmemoryBlogspotTwMain"><span class="screen-reader-text">Google+</span></a></li>
+<li id="menu-item-5251" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5251"><a href="https://www.facebook.com/GTWang.org/"><span class="screen-reader-text">Facebook</span></a></li>
+<li id="menu-item-6669" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6669"><a href="https://www.flickr.com/photos/gtwang/"><span class="screen-reader-text">Flickr</span></a></li>
+<li id="menu-item-151" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-151"><a class="search-toggle" href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/#"><span class="screen-reader-text">Search</span></a></li>						
+					</ul> <!-- /social-menu -->
+				
+				<div class="clear"></div>
+				
+				</div> <!-- /section-inner -->
+				
+			</div> <!-- /top-nav -->
+			
+				
+		<div class="search-container">
+			
+			<div class="section-inner">
+			
+				<form method="get" class="search-form" id="search-form" action="https://blog.gtwang.org/">
+	<!--<input type="search" class="search-field" placeholder="Search form" name="s" id="s" />-->
+	<input type="search" class="search-field" placeholder="搜尋這個網站" name="s" id="s">
+	<button type="submit" class="search-button"><div class="fa fw fa-search"></div></button>
+</form>			
+			</div> <!-- /section-inner -->
+			
+		</div> <!-- /search-container -->
+		
+		<div class="header-wrapper">
+		
+			<div class="header">
+					
+				<div class="section-inner">
+
+									
+				        <a class="blog-logo" href="https://blog.gtwang.org/" title="G. T. Wang — 分享 GNU/Linux 與 Open Source 技術、教學文件、程式設計技巧、統計研究與生活點滴記錄" rel="home">
+				        	<img src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/gtwang-logo-90x90.png" alt="G. T. Wang">
+				        </a>
+				
+					<!-- Begin: Adsense -->
+<div class="top-adsense-banner">
+
+<!-- GTWang Blog 置頂大橫幅回應式 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7794009487786811" data-ad-slot="1154407736" data-ad-format="horizontal"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+  params: { google_ad_channel: ABTesting.adsenseChannel }
+});
+</script>
+
+</div>
+<!-- End: Adsense -->
+					<div class="nav-toggle">
+						
+						<div class="bars">
+							<div class="bar"></div>
+							<div class="bar"></div>
+							<div class="bar"></div>
+						</div>
+						
+					</div> <!-- /nav-toggle -->
+				
+				</div> <!-- /section-inner -->
+				
+			</div> <!-- /header -->
+			
+			<div class="navigation">
+				
+				<div class="section-inner">
+					
+					<ul class="primary-menu">
+						
+						<li id="menu-item-16654" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-16654"><a href="https://blog.gtwang.org/category/iot/">物聯網</a></li>
+<li id="menu-item-5604" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5604"><a href="https://blog.gtwang.org/web-building/">網站架設</a></li>
+<li id="menu-item-11789" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-11789"><a href="https://blog.gtwang.org/programming/">程式設計</a></li>
+<li id="menu-item-5192" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5192"><a href="https://blog.gtwang.org/statistics/">統計</a></li>
+<li id="menu-item-10410" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10410"><a href="https://blog.gtwang.org/tag/vegetarian/">素食</a></li>
+<li id="menu-item-13001" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13001"><a href="https://blog.gtwang.org/tag/sale/">特價優惠</a></li>
+<li id="menu-item-32396" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32396"><a href="https://blog.gtwang.org/religion/">宗教</a></li>
+															
+					</ul>
+					
+					<div class="clear"></div>
+					
+				</div>
+				
+			</div> <!-- /navigation -->
+				
+			<ul class="mobile-menu" style="display: none;">
+				
+				<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-16654"><a href="https://blog.gtwang.org/category/iot/">物聯網</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5604"><a href="https://blog.gtwang.org/web-building/">網站架設</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-11789"><a href="https://blog.gtwang.org/programming/">程式設計</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5192"><a href="https://blog.gtwang.org/statistics/">統計</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10410"><a href="https://blog.gtwang.org/tag/vegetarian/">素食</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13001"><a href="https://blog.gtwang.org/tag/sale/">特價優惠</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32396"><a href="https://blog.gtwang.org/religion/">宗教</a></li>
+				
+			</ul> <!-- /mobile-menu -->
+				
+		</div> <!-- /header-wrapper -->
+
+<div class="wrapper section-inner">
+	
+	<div class="content">
+												        
+				
+			<div id="post-38768" class="single post-38768 post type-post status-publish format-standard has-post-thumbnail hentry category-programming tag-google tag-ocr tag-python">
+
+				<div class="post-header">
+										
+											<!--<p class="post-categories"><a href="https://blog.gtwang.org/category/programming/" rel="category tag">程式設計</a></p>-->
+										
+											
+					    <h1 class="post-title entry-title"><a href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/" title="Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學">Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學</a></h1>
+					    
+										
+					<div class="post-meta">
+						<!--<span class="resp">Posted</span> <span class="post-meta-author">by <a href="https://blog.gtwang.org/author/admin/">G. T. Wang</a></span> on --><span class="post-meta-date date updated">2018/03/02</span> 													<span class="post-comments">
+								<a href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/#respond"><span class="fa fw fa-comment"></span>0<span class="resp"> Comments</span></a>							</span>
+											</div> <!-- /post-meta -->
+					
+				</div> <!-- /post-header -->
+
+						
+					<div class="post-image">
+					
+						<a title="Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學" href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/">	
+							
+							<img width="816" height="459" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/bundle-20180302-1-816x459.jpg" class="attachment-post-image size-post-image wp-post-image" alt="" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/bundle-20180302-1-816x459.jpg 816w, https://blog.gtwang.org/wp-content/uploads/2018/02/bundle-20180302-1-300x169.jpg 300w, https://blog.gtwang.org/wp-content/uploads/2018/02/bundle-20180302-1-1024x576.jpg 1024w, https://blog.gtwang.org/wp-content/uploads/2018/02/bundle-20180302-1-816x459@2x.jpg 1632w, https://blog.gtwang.org/wp-content/uploads/2018/02/bundle-20180302-1-300x169@2x.jpg 600w" sizes="(max-width: 816px) 100vw, 816px">							
+						</a>
+						
+												
+					</div> <!-- /post-image -->
+						
+							  
+				<div class="clear"></div>
+				
+				<!-- Begin: Sidebar Adsense -->
+				<div class="clear"></div>
+					
+<div class="related-posts">
+<!-- GTWang Blog 文章左側 160x600 -->
+<ins class="adsbygoogle left-sidebar-adsense" data-ad-client="ca-pub-7794009487786811" data-ad-slot="3721790935"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+  params: { google_ad_channel: ABTesting.adsenseChannel }
+});
+</script>
+
+</div> <!-- /related-posts -->
+				<!-- End: Sidebar Adsense -->
+				
+				<div class="post-inner">
+					
+						
+						<div class="post-content">
+
+<!-- Begin: AdSense -->
+<!--<div class="post-top-adsense">
+</div>-->
+<!-- End: AdSense -->
+
+							<p>這裡示範如何在 Python 中使用 Google 雲端硬碟 API，自動上傳圖片、進行文字辨識、下載結果。</p>
+<p>在上一篇的 <a href="https://blog.gtwang.org/useful-tools/google-drive-vertical-and-horizontal-chinese-characters-ocr-tutorial/">Google 雲端硬碟文字辨識的文章</a>中，我們介紹了以手動的方式上傳圖片，讓 Google 幫忙自動取出圖片中的文字，雖然省去了大量的打字工作，但是若遇到圖片數量很龐大時，以手動上傳還是很吃力的。<br>
+</p><div>
+<!-- GTWang Blog 文章中間連結200x90 -->
+<ins class="adsbygoogle" style="display:inline-block;width:200px;height:90px" data-ad-client="ca-pub-7794009487786811" data-ad-slot="7983235733"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+  params: { google_ad_channel: ABTesting.adsenseChannel }
+});
+</script>
+</div><br>
+其實 Google 的各項服務都有提供 API 的功能，可以讓程式透過 API 存取 Google 的各種服務或使用者資料，以下我們示範如何在 Python 中使用 Google 雲端硬碟 API，實作自動化的文字辨識程式，處理巨量資料。<p></p>
+<h2>啟用 Google 雲端硬碟 API</h2>
+<p>參考 <a href="https://developers.google.com/drive/v3/web/quickstart/python">Google Developers 的官方文件</a>，啟用 Google 雲端硬碟 API。</p>
+<p><span class="block-label">Step 1</span><br>
+開啟 <a href="https://console.developers.google.com/start/api?id=drive">Google Drive API 註冊網頁</a>，選擇「建立專案」，點選同意服務條款，然後點選「同意並繼續」。</p>
+<div id="attachment_38988" style="width: 599px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-01.png"><img class="wp-image-38988 size-full" title="Google Drive API 註冊網頁" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-01.png" alt="" width="589" height="474" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-01.png 589w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-01-300x241.png 300w" sizes="(max-width: 589px) 100vw, 589px"></a><p class="wp-caption-text">Google Drive API 註冊網頁</p></div>
+<p><span class="block-label">Step 2</span><br>
+啟用 API 之後，點選「前往憑證」。</p>
+<div id="attachment_38989" style="width: 599px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-02.png"><img class="wp-image-38989 size-full" title="Google Drive API 註冊網頁" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-02.png" alt="" width="589" height="474" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-02.png 589w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-02-300x241.png 300w" sizes="(max-width: 589px) 100vw, 589px"></a><p class="wp-caption-text">Google Drive API 註冊網頁</p></div>
+<p><span class="block-label">Step 3</span><br>
+憑證類型選擇「Google Drive API」，API 的呼叫來源選擇「其他使用者介面」，存取資料則選擇「使用者資料」。</p>
+<div id="attachment_38990" style="width: 603px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-03.png"><img class="wp-image-38990 size-full" title="Google 雲端硬碟 API 憑證設定" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-03.png" alt="" width="593" height="793" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-03.png 593w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-03-224x300.png 224w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-03-224x300@2x.png 448w" sizes="(max-width: 593px) 100vw, 593px"></a><p class="wp-caption-text">Google 雲端硬碟 API 憑證設定</p></div>
+<p><span class="block-label">Step 4</span><br>
+填入名稱，由於是自己用的，所以隨便取一個名字就好了。</p>
+<div id="attachment_38991" style="width: 605px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-04.png"><img class="wp-image-38991 size-full" title="Google 雲端硬碟 API 憑證設定" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-04.png" alt="" width="595" height="646" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-04.png 595w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-04-276x300.png 276w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-04-276x300@2x.png 552w" sizes="(max-width: 595px) 100vw, 595px"></a><p class="wp-caption-text">Google 雲端硬碟 API 憑證設定</p></div>
+<p><span class="block-label">Step 5</span><br>
+設定同意畫面的 Email 與名稱，這裡同樣自己隨便取一個名字即可。</p>
+<div id="attachment_38992" style="width: 605px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-05.png"><img class="wp-image-38992 size-full" title="Google 雲端硬碟 API 憑證設定" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-05.png" alt="" width="595" height="836" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-05.png 595w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-05-214x300.png 214w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-05-214x300@2x.png 428w" sizes="(max-width: 595px) 100vw, 595px"></a><p class="wp-caption-text">Google 雲端硬碟 API 憑證設定</p></div>
+<p><span class="block-label">Step 6</span><br>
+下載 JSON 格式的憑證檔案，下載後儲存為 <code>client_id.json</code>，這個檔案在之後的 Python 程式執行時會需要用到。下載完憑證之後，點選「完成」。</p>
+<div id="attachment_38993" style="width: 618px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-06.png"><img class="wp-image-38993 size-full" title="下載 Google 雲端硬碟 API 憑證" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-06.png" alt="" width="608" height="687" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-06.png 608w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-06-266x300.png 266w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-06-266x300@2x.png 532w" sizes="(max-width: 608px) 100vw, 608px"></a><p class="wp-caption-text">下載 Google 雲端硬碟 API 憑證</p></div>
+<p><span class="block-label">Step 7</span><br>
+這裡可以查看與管理目前已經建立的所有憑證，若憑證不用時就可以在這裡刪除。</p>
+<div id="attachment_38994" style="width: 892px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-07.png"><img class="wp-image-38994 size-full" title="Google 雲端硬碟 API 憑證管理" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-07.png" alt="" width="882" height="555" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-07.png 882w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-07-300x189.png 300w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-07-816x513.png 816w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-07-300x189@2x.png 600w" sizes="(max-width: 882px) 100vw, 882px"></a><p class="wp-caption-text">Google 雲端硬碟 API 憑證管理</p></div>
+<div style="margin: 40px 0;"><!-- GTWang 文章 inline -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-7794009487786811" data-ad-slot="7302780695"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div><h2>安裝 Google Client Library</h2>
+<p>Google 所提供的 <a href="https://developers.google.com/api-client-library/">API Client Libraries</a> 可以協助開發者加速程式的開發，請用 <code>pip</code> 安裝：</p>
+<pre><span class="Comment"># Python 2</span>
+pip install <span class="Special">--upgrade</span> google-api-python-client
+
+<span class="Comment"># Python 3</span>
+pip3 install <span class="Special">--upgrade</span> google-api-python-client</pre>
+<h2>Python 程式碼</h2>
+<p>開發程式之前，請先參考 <a href="https://developers.google.com/drive/v3/web/quickstart/python">Google Developers 官方文件</a>所提供的 Python 範例，看懂之後再把程式碼改成自動上傳圖片、下載文字檔的 Python 程式，以下是完整的程式碼。</p>
+<pre><span class="Comment">#!/usr/bin/python3</span>
+<span class="PreProc">from</span> __future__ <span class="PreProc">import</span> print_function
+<span class="PreProc">import</span> httplib2
+<span class="PreProc">import</span> os
+<span class="PreProc">import</span> io
+
+<span class="PreProc">from</span> apiclient <span class="PreProc">import</span> discovery
+<span class="PreProc">from</span> oauth2client <span class="PreProc">import</span> client
+<span class="PreProc">from</span> oauth2client <span class="PreProc">import</span> tools
+<span class="PreProc">from</span> oauth2client.file <span class="PreProc">import</span> Storage
+<span class="PreProc">from</span> apiclient.http <span class="PreProc">import</span> MediaFileUpload, MediaIoBaseDownload
+
+<span class="Statement">try</span>:
+  <span class="PreProc">import</span> argparse
+  flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+<span class="Statement">except</span> <span class="Type">ImportError</span>:
+  flags = <span class="Identifier">None</span>
+
+SCOPES = <span class="Constant">'</span><span class="Constant">https://www.googleapis.com/auth/drive</span><span class="Constant">'</span>
+CLIENT_SECRET_FILE = <span class="Constant">'</span><span class="Constant">client_id.json</span><span class="Constant">'</span>
+APPLICATION_NAME = <span class="Constant">'</span><span class="Constant">Python OCR</span><span class="Constant">'</span>
+
+<span class="Statement">def</span> <span class="Identifier">get_credentials</span>():
+  <span class="Constant">"""</span><span class="Constant">取得有效的憑證</span>
+<span class="Constant">     若沒有憑證，或是已儲存的憑證無效，就會自動取得新憑證</span>
+
+<span class="Constant">     傳回值：取得的憑證</span>
+  <span class="Constant">"""</span>
+  credential_path = os.path.join(<span class="Constant">"</span><span class="Constant">./</span><span class="Constant">"</span>, <span class="Constant">'</span><span class="Constant">google-ocr-credential.json</span><span class="Constant">'</span>)
+  store = Storage(credential_path)
+  credentials = store.get()
+  <span class="Statement">if</span> <span class="Statement">not</span> credentials <span class="Statement">or</span> credentials.invalid:
+    flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+    flow.user_agent = APPLICATION_NAME
+    <span class="Statement">if</span> flags:
+      credentials = tools.run_flow(flow, store, flags)
+    <span class="Statement">else</span>: <span class="Comment"># Needed only for compatibility with Python 2.6</span>
+      credentials = tools.run(flow, store)
+    <span class="Identifier">print</span>(<span class="Constant">'</span><span class="Constant">憑證儲存於：</span><span class="Constant">'</span> + credential_path)
+  <span class="Statement">return</span> credentials
+
+<span class="Statement">def</span> <span class="Identifier">main</span>():
+
+  <span class="Comment"># 取得憑證、認證、建立 Google 雲端硬碟 API 服務物件</span>
+  credentials = get_credentials()
+  http = credentials.authorize(httplib2.Http())
+  service = discovery.build(<span class="Constant">'</span><span class="Constant">drive</span><span class="Constant">'</span>, <span class="Constant">'</span><span class="Constant">v3</span><span class="Constant">'</span>, http=http)
+
+  <span class="Comment"># 包含文字內容的圖片檔案（png、jpg、bmp、gif、pdf）</span>
+  imgfile = <span class="Constant">'</span><span class="Constant">sample.jpg</span><span class="Constant">'</span>
+
+  <span class="Comment"># 輸出辨識結果的文字檔案</span>
+  txtfile = <span class="Constant">'</span><span class="Constant">output.txt</span><span class="Constant">'</span>
+
+  <span class="Comment"># 上傳成 Google 文件檔，讓 Google 雲端硬碟自動辨識文字</span>
+  mime = <span class="Constant">'</span><span class="Constant">application/vnd.google-apps.document</span><span class="Constant">'</span>
+  res = service.files().create(
+    body={
+      <span class="Constant">'</span><span class="Constant">name</span><span class="Constant">'</span>: imgfile,
+      <span class="Constant">'</span><span class="Constant">mimeType</span><span class="Constant">'</span>: mime
+    },
+    media_body=MediaFileUpload(imgfile, mimetype=mime, resumable=<span class="Identifier">True</span>)
+  ).execute()
+
+  <span class="Comment"># 下載辨識結果，儲存為文字檔案</span>
+  downloader = MediaIoBaseDownload(
+    io.FileIO(txtfile, <span class="Constant">'</span><span class="Constant">wb</span><span class="Constant">'</span>),
+    service.files().export_media(fileId=res[<span class="Constant">'</span><span class="Constant">id</span><span class="Constant">'</span>], mimeType=<span class="Constant">"</span><span class="Constant">text/plain</span><span class="Constant">"</span>)
+  )
+  done = <span class="Identifier">False</span>
+  <span class="Statement">while</span> done <span class="Statement">is</span> <span class="Identifier">False</span>:
+    status, done = downloader.next_chunk()
+
+  <span class="Comment"># 刪除剛剛上傳的 Google 文件檔案</span>
+  service.files().delete(fileId=res[<span class="Constant">'</span><span class="Constant">id</span><span class="Constant">'</span>]).execute()
+
+<span class="Statement">if</span> __name__ == <span class="Constant">'</span><span class="Constant">__main__</span><span class="Constant">'</span>:
+  main()</pre>
+<p>程式碼的上半部大致上跟官方的範例相同，只不過是修改下方的操作部份，這裡的技巧就是將圖檔上傳為 Google 文件檔，讓 Google 自動進行文字辨識，接著再將該文件下載為文字檔，這樣就可以取得辨識的結果。</p>
+<p>把上面這段 Python 程式碼儲存為 <code>google_ocr.py</code>，然後把要進行辨識的圖片儲存為 <code>sample.jpg</code>，這裡我用這張圖片作為示範。</p>
+<div id="attachment_38458" style="width: 626px" class="wp-caption alignnone"><a href="https://blog.gtwang.org/wp-content/uploads/2018/02/google-drive-vertical-and-horizontal-chinese-characters-ocr-tutorial-20180220-09.jpg"><img class="wp-image-38458 size-large" title="含有文字的圖片" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/google-drive-vertical-and-horizontal-chinese-characters-ocr-tutorial-20180220-09-801x1024.jpg" alt="" width="616" height="787" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/google-drive-vertical-and-horizontal-chinese-characters-ocr-tutorial-20180220-09-801x1024.jpg 801w, https://blog.gtwang.org/wp-content/uploads/2018/02/google-drive-vertical-and-horizontal-chinese-characters-ocr-tutorial-20180220-09-235x300.jpg 235w, https://blog.gtwang.org/wp-content/uploads/2018/02/google-drive-vertical-and-horizontal-chinese-characters-ocr-tutorial-20180220-09-816x1043.jpg 816w, https://blog.gtwang.org/wp-content/uploads/2018/02/google-drive-vertical-and-horizontal-chinese-characters-ocr-tutorial-20180220-09.jpg 1036w, https://blog.gtwang.org/wp-content/uploads/2018/02/google-drive-vertical-and-horizontal-chinese-characters-ocr-tutorial-20180220-09-235x300@2x.jpg 470w" sizes="(max-width: 616px) 100vw, 616px"></a><p class="wp-caption-text">含有文字的圖片</p></div>
+<p>接著就可以執行 Python 程式進行辨識了：</p>
+<pre>python3 google_ocr.py</pre>
+<p>第一次執行時，會跳出一個網頁，取得 Google 雲端硬碟的存取權限，首先選擇要使用的 Google 帳戶。</p>
+<div id="attachment_38995" style="width: 643px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-08.png"><img class="wp-image-38995 size-full" title="選擇 Google 帳戶" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-08.png" alt="" width="633" height="695" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-08.png 633w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-08-273x300.png 273w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-08-273x300@2x.png 546w" sizes="(max-width: 633px) 100vw, 633px"></a><p class="wp-caption-text">選擇 Google 帳戶</p></div>
+<p>點選「允許」，讓程式取得自己 Google 雲端硬碟的存取權限。</p>
+<div id="attachment_38996" style="width: 643px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-09.png"><img class="wp-image-38996 size-full" title="授權存取帳戶" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-09.png" alt="" width="633" height="695" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-09.png 633w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-09-273x300.png 273w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-09-273x300@2x.png 546w" sizes="(max-width: 633px) 100vw, 633px"></a><p class="wp-caption-text">授權存取帳戶</p></div>
+<p>取得授權之後，程式就會自動將圖片上傳至 Google 雲端硬碟進行文字辨識、下載辨識結果，最後自動將上傳至 Google 雲端硬碟上的文件刪除，辨識的結果會儲存至 <code>output.txt</code> 這個文字檔案中。</p>
+<div id="attachment_39004" style="width: 554px" class="wp-caption alignnone"><a href="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-10.png"><img class="wp-image-39004 size-full" title="文字辨識結果" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/automation-of-google-ocr-using-python-tutorial-20180302-10.png" alt="" width="544" height="386" srcset="https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-10.png 544w, https://blog.gtwang.org/wp-content/uploads/2018/02/automation-of-google-ocr-using-python-tutorial-20180302-10-300x213.png 300w" sizes="(max-width: 544px) 100vw, 544px"></a><p class="wp-caption-text">文字辨識結果</p></div>
+<p>以這個例子來說，辨識的結果很不錯。</p>
+<p>本篇示範以 Google 雲端硬碟 API 自動辨識單張圖檔，而有了這個基本的 Python 程式碼之後，只要再加上簡單的迴圈控制，就可以自動處理大量的圖片文字辨識問題，對於有大量資料需要整理的人來說，非常實用。</p>
+<p>參考資料：<a href="https://tanaikech.github.io/2017/05/02/ocr-using-google-drive-api/">tanaike</a>、<a href="https://github.com/tshrinivasan/google-ocr-python">google-ocr-python</a>、<a href="https://github.com/prasmussen/gdrive">gdrive</a></p>
+							
+							
+<!-- Begin: AdSense -->
+<p style="margin-top: 30px">
+<!-- GTWang Blog 文章置底連結 -->
+<ins class="adsbygoogle" style="display:inline-block;width:200px;height:90px" data-ad-client="ca-pub-7794009487786811" data-ad-slot="9284477339"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+    params: { google_ad_channel: ABTesting.adsenseChannel }
+});
+</script>
+</p>
+<!-- End: AdSense -->
+<!-- Begin: AdSense -->
+<div style="text-align: center;margin-top: 40px;">
+
+<!-- GTWang Blog 文章置底回應式 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7794009487786811" data-ad-slot="1934225336" data-ad-format="rectangle"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+    params: { google_ad_channel: ABTesting.adsenseChannel }
+});
+</script>
+<!-- GTWang 文章置底內置廣告1 -->
+<!--
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-format="fluid"
+     data-ad-layout="in-article"
+     data-ad-client="ca-pub-7794009487786811"
+     data-ad-slot="5913525449"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+
+</div>
+<!-- End: AdSense -->
+						  
+						</div>
+					
+					
+					<div class="post-bottom-meta">
+
+<!-- Begin: Social Media -->
+<div style="margin-bottom: 20px;">
+<!-- Begin: facebook -->
+<div class="fb-like fb_iframe_widget" data-layout="button_count" data-share="true" data-href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=338766312900008&amp;container_width=572&amp;href=https%3A%2F%2Fblog.gtwang.org%2Fprogramming%2Fautomation-of-google-ocr-using-python-tutorial%2F&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true"><span style="vertical-align: bottom; width: 103px; height: 20px;"><iframe name="f32eda44dc8d788" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/like.html" style="border: none; visibility: visible; width: 103px; height: 20px;" class="" data-origwidth="1000px" data-origheight="1000px"></iframe></span></div>
+<!-- End: facebook -->
+</div>
+<!-- End: Social Media -->
+
+													<div class="post-categories">
+								<i class="fa fa-folder-open item-icon"></i>
+								<a href="https://blog.gtwang.org/category/programming/" rel="category tag">程式設計</a>							</div>
+											
+											
+							<div class="post-tags">
+
+								<i class="fa fa-tags item-icon"></i>
+							
+								<a href="https://blog.gtwang.org/tag/google/" rel="tag">Google</a><a href="https://blog.gtwang.org/tag/ocr/" rel="tag">OCR</a><a href="https://blog.gtwang.org/tag/python/" rel="tag">Python</a>							
+							</div>
+					
+											</div>
+					
+					<div class="post-author vcard author">
+						
+						<a class="avatar" href="https://blog.gtwang.org/author/admin/">
+														
+							<img alt="" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/695aa3a56c129b4303b67f2700d3c474" srcset="https://secure.gravatar.com/avatar/695aa3a56c129b4303b67f2700d3c474?s=200&amp;d=mm&amp;r=g 2x" class="avatar avatar-100 photo" height="100" width="100">							
+						</a>
+						
+						<h4 class="title"><a href="https://blog.gtwang.org/author/admin/">G. T. Wang</a></h4>
+						
+						<p class="description">個人使用 Linux 經驗長達十餘年，樂於分享各種自由軟體技術與實作文章。</p>
+
+					</div> <!-- /post-author -->
+
+<!-- Begin: Google DFP -->
+<!--<div style="text-align: center;margin-top: 40px;">-->
+<!-- /54009424/gtwang-post-bottom-2 -->
+<!--<div id='div-gpt-ad-1432250578318-4'>
+<script type='text/javascript'>
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1432250578318-4'); });
+</script>
+</div>
+</div>-->
+<!-- End: Google DFP -->
+
+					<!-- Begin: Google 相符內容 -->
+<div class="google-related-post">
+<!-- GTWang Blog 相符內容回應式 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7794009487786811" data-ad-slot="5084874535" data-ad-format="autorelaxed"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+  params: { google_ad_channel: ABTesting.adsenseChannel }
+});
+</script>
+</div>
+<!-- End: Google 相符內容 -->
+<!-- Begin: Google AdSense -->
+<!--<div style="text-align:center;margin-top:40px;">-->
+<!-- GTWang Blog 文章置底回應式（二） -->
+<!--
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7794009487786811"
+     data-ad-slot="1387954139"
+     data-ad-format="rectangle"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+  params: { google_ad_channel: ABTesting.adsenseChannel }
+});
+</script>
+</div>
+-->  
+<!-- End: Google AdSense -->
+
+<!-- Begin: Facebook Comments -->
+<!--<div class="facebook-comments">
+<div class="fb-comments" data-href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/" data-numposts="5"></div>
+</div>-->
+<!-- End: Facebook Comments -->
+
+				</div> <!-- /post-inner -->
+				
+				<div class="clear"></div>
+				
+			</div> <!-- /post -->
+	  	  
+			
+
+
+<div class="respond-container">	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title"><span class="fa fw fa-pencil"></span>Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/#respond" style="display:none;">取消回覆</a></small></h3>			<form action="https://blog.gtwang.org/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+				<p class="comment-form-comment">
+			<label for="comment">Comment<span class="required">*</span></label>
+			<textarea id="comment" name="comment" cols="45" rows="6" required=""></textarea>
+		</p><p class="comment-form-author">
+				<label for="author">Name<span class="required">*</span></label> 
+				<input id="author" name="author" type="text" value="" size="30">
+			</p>
+<p class="comment-form-email">
+				<label for="email">Email<span class="required">*</span></label> 
+				<input id="email" name="email" type="text" value="" size="30">
+			</p>
+<p class="comment-form-url">
+				<label for="url">Website</label>
+				<input id="url" name="url" type="text" value="" size="30">
+			</p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="張貼迴響"> <input type="hidden" name="comment_post_ID" value="38768" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p>			<input type="hidden" name="TvyPFr-biZWh" value="[dryJ6XR_E24"><input type="hidden" name="aqNjepORUdo" value="tWZUs6AJEN9"><input type="hidden" name="GhtXicSV_yvnO" value="*58Ypa2Z0VcPj"></form>
+			</div><!-- #respond -->
+	</div> <!-- /respond-container -->										                        
+	   	    
+	
+	</div> <!-- /content -->
+	
+	<div class="sidebar">
+
+	<div class="widget widget_search"><div class="widget-content"><form method="get" class="search-form" id="search-form" action="https://blog.gtwang.org/">
+	<!--<input type="search" class="search-field" placeholder="Search form" name="s" id="s" />-->
+	<input type="search" class="search-field" placeholder="搜尋這個網站" name="s" id="s">
+	<button type="submit" class="search-button"><div class="fa fw fa-search"></div></button>
+</form></div><div class="clear"></div></div><div class="widget_text widget widget_custom_html"><div class="widget_text widget-content"><div class="textwidget custom-html-widget"><!-- GTWang Blog 側邊置頂 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7794009487786811" data-ad-slot="1761210530" data-ad-format="rectangle"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+params: { google_ad_channel: ABTesting.adsenseChannel }
+});
+</script></div></div><div class="clear"></div></div><div class="widget widget_links"><div class="widget-content"><h3 class="widget-title">推薦</h3>
+	<ul class="xoxo blogroll">
+<li><a href="https://click.linksynergy.com/fs-bin/click?id=bKoyTcAhOEo&amp;offerid=467035.207&amp;type=3&amp;subid=0">Coursera 線上教學課程</a></li>
+<li><a href="https://click.linksynergy.com/fs-bin/click?id=bKoyTcAhOEo&amp;offerid=323058.81&amp;type=3&amp;subid=0">Udemy 線上教學課程</a></li>
+
+	</ul>
+</div><div class="clear"></div></div>
+<div class="widget_text widget widget_custom_html"><div class="widget_text widget-content"><div class="textwidget custom-html-widget"><!-- GTWang Blog 側邊連結回應式 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7794009487786811" data-ad-slot="2064605305" data-ad-format="link"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></div><div class="clear"></div></div><div class="widget widget_tag_cloud"><div class="widget-content"><h3 class="widget-title">分類</h3><div class="tagcloud"><a href="https://blog.gtwang.org/category/iot/arduino/" class="tag-cloud-link tag-link-14 tag-link-position-1" style="font-size: 11.2pt;" aria-label="Arduino (5 個項目)">Arduino<span class="tag-link-count"> (5)</span></a>
+<a href="https://blog.gtwang.org/category/iot/beaglebone-black/" class="tag-cloud-link tag-link-37 tag-link-position-2" style="font-size: 8pt;" aria-label="BeagleBone Black (1 個項目)">BeagleBone Black<span class="tag-link-count"> (1)</span></a>
+<a href="https://blog.gtwang.org/category/diy/" class="tag-cloud-link tag-link-28 tag-link-position-3" style="font-size: 14.8pt;" aria-label="DIY (20 個項目)">DIY<span class="tag-link-count"> (20)</span></a>
+<a href="https://blog.gtwang.org/category/linux/" class="tag-cloud-link tag-link-25 tag-link-position-4" style="font-size: 22pt;" aria-label="Linux (249 個項目)">Linux<span class="tag-link-count"> (249)</span></a>
+<a href="https://blog.gtwang.org/category/mac-os-x/" class="tag-cloud-link tag-link-54 tag-link-position-5" style="font-size: 16.133333333333pt;" aria-label="Mac OS X (32 個項目)">Mac OS X<span class="tag-link-count"> (32)</span></a>
+<a href="https://blog.gtwang.org/category/octave/" class="tag-cloud-link tag-link-113 tag-link-position-6" style="font-size: 14pt;" aria-label="Octave (15 個項目)">Octave<span class="tag-link-count"> (15)</span></a>
+<a href="https://blog.gtwang.org/category/perl/" class="tag-cloud-link tag-link-119 tag-link-position-7" style="font-size: 13.4pt;" aria-label="Perl (12 個項目)">Perl<span class="tag-link-count"> (12)</span></a>
+<a href="https://blog.gtwang.org/category/r/" class="tag-cloud-link tag-link-146 tag-link-position-8" style="font-size: 16.933333333333pt;" aria-label="R (43 個項目)">R<span class="tag-link-count"> (43)</span></a>
+<a href="https://blog.gtwang.org/category/windows/" class="tag-cloud-link tag-link-29 tag-link-position-9" style="font-size: 19.2pt;" aria-label="Windows (95 個項目)">Windows<span class="tag-link-count"> (95)</span></a>
+<a href="https://blog.gtwang.org/category/wordpress/" class="tag-cloud-link tag-link-27 tag-link-position-10" style="font-size: 14pt;" aria-label="WordPress (15 個項目)">WordPress<span class="tag-link-count"> (15)</span></a>
+<a href="https://blog.gtwang.org/category/personal/" class="tag-cloud-link tag-link-934 tag-link-position-11" style="font-size: 13.866666666667pt;" aria-label="個人 (14 個項目)">個人<span class="tag-link-count"> (14)</span></a>
+<a href="https://blog.gtwang.org/category/free/" class="tag-cloud-link tag-link-132 tag-link-position-12" style="font-size: 16.266666666667pt;" aria-label="免費 (34 個項目)">免費<span class="tag-link-count"> (34)</span></a>
+<a href="https://blog.gtwang.org/category/children/" class="tag-cloud-link tag-link-24 tag-link-position-13" style="font-size: 14.2pt;" aria-label="兒童 (16 個項目)">兒童<span class="tag-link-count"> (16)</span></a>
+<a href="https://blog.gtwang.org/category/useful-tools/" class="tag-cloud-link tag-link-18 tag-link-position-14" style="font-size: 18.8pt;" aria-label="實用工具 (83 個項目)">實用工具<span class="tag-link-count"> (83)</span></a>
+<a href="https://blog.gtwang.org/category/mobile/" class="tag-cloud-link tag-link-67 tag-link-position-15" style="font-size: 13.666666666667pt;" aria-label="手機 (13 個項目)">手機<span class="tag-link-count"> (13)</span></a>
+<a href="https://blog.gtwang.org/category/tips/" class="tag-cloud-link tag-link-47 tag-link-position-16" style="font-size: 17.066666666667pt;" aria-label="技巧 (45 個項目)">技巧<span class="tag-link-count"> (45)</span></a>
+<a href="https://blog.gtwang.org/category/funny/" class="tag-cloud-link tag-link-21 tag-link-position-17" style="font-size: 19.333333333333pt;" aria-label="有趣 (99 個項目)">有趣<span class="tag-link-count"> (99)</span></a>
+<a href="https://blog.gtwang.org/category/iot/raspberry-pi/" class="tag-cloud-link tag-link-4 tag-link-position-18" style="font-size: 17.533333333333pt;" aria-label="樹莓派 (53 個項目)">樹莓派<span class="tag-link-count"> (53)</span></a>
+<a href="https://blog.gtwang.org/category/iot/" class="tag-cloud-link tag-link-3 tag-link-position-19" style="font-size: 17.466666666667pt;" aria-label="物聯網 (52 個項目)">物聯網<span class="tag-link-count"> (52)</span></a>
+<a href="https://blog.gtwang.org/category/metaphysics/" class="tag-cloud-link tag-link-940 tag-link-position-20" style="font-size: 12.666666666667pt;" aria-label="玄學 (9 個項目)">玄學<span class="tag-link-count"> (9)</span></a>
+<a href="https://blog.gtwang.org/category/life/" class="tag-cloud-link tag-link-81 tag-link-position-21" style="font-size: 20.8pt;" aria-label="生活 (166 個項目)">生活<span class="tag-link-count"> (166)</span></a>
+<a href="https://blog.gtwang.org/category/programming/" class="tag-cloud-link tag-link-8 tag-link-position-22" style="font-size: 20.066666666667pt;" aria-label="程式設計 (128 個項目)">程式設計<span class="tag-link-count"> (128)</span></a>
+<a href="https://blog.gtwang.org/category/statistics/" class="tag-cloud-link tag-link-94 tag-link-position-23" style="font-size: 12.333333333333pt;" aria-label="統計學 (8 個項目)">統計學<span class="tag-link-count"> (8)</span></a>
+<a href="https://blog.gtwang.org/category/web-hosting/" class="tag-cloud-link tag-link-106 tag-link-position-24" style="font-size: 16.066666666667pt;" aria-label="網頁空間 (31 個項目)">網頁空間<span class="tag-link-count"> (31)</span></a>
+<a href="https://blog.gtwang.org/category/web-development/" class="tag-cloud-link tag-link-51 tag-link-position-25" style="font-size: 19.933333333333pt;" aria-label="網頁開發 (122 個項目)">網頁開發<span class="tag-link-count"> (122)</span></a>
+<a href="https://blog.gtwang.org/category/virtualization/" class="tag-cloud-link tag-link-74 tag-link-position-26" style="font-size: 12pt;" aria-label="虛擬化 (7 個項目)">虛擬化<span class="tag-link-count"> (7)</span></a>
+<a href="https://blog.gtwang.org/category/agriculture/" class="tag-cloud-link tag-link-956 tag-link-position-27" style="font-size: 16.6pt;" aria-label="農業 (38 個項目)">農業<span class="tag-link-count"> (38)</span></a>
+<a href="https://blog.gtwang.org/category/game/" class="tag-cloud-link tag-link-79 tag-link-position-28" style="font-size: 12.666666666667pt;" aria-label="遊戲 (9 個項目)">遊戲<span class="tag-link-count"> (9)</span></a>
+<a href="https://blog.gtwang.org/category/unboxing/" class="tag-cloud-link tag-link-12 tag-link-position-29" style="font-size: 18.4pt;" aria-label="開箱 (72 個項目)">開箱<span class="tag-link-count"> (72)</span></a>
+<a href="https://blog.gtwang.org/category/cloud/" class="tag-cloud-link tag-link-925 tag-link-position-30" style="font-size: 10.666666666667pt;" aria-label="雲端 (4 個項目)">雲端<span class="tag-link-count"> (4)</span></a></div>
+</div><div class="clear"></div></div><div class="widget widget_links"><div class="widget-content"><h3 class="widget-title">宗教</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://jeise.pixnet.net/blog" title="佛教文章分享">如何戒邪淫、遠離婚外情</a></li>
+
+	</ul>
+</div><div class="clear"></div></div>
+<div class="widget widget_links"><div class="widget-content"><h3 class="widget-title">公益</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://www.17885.com.tw/">智邦公益網</a></li>
+<li><a href="http://www.ccf.org.tw/">家扶基金會</a></li>
+<li><a href="https://tw.charity.yahoo.com/">Yahoo 奇摩公益</a></li>
+<li><a href="http://www.rice4u.org.tw/">社團法人新竹縣愛心物資集發協會</a></li>
+<li><a href="https://www.igiving.org.tw/">igiving 公益網</a></li>
+
+	</ul>
+</div><div class="clear"></div></div>
+<div class="widget_text widget widget_custom_html"><div class="widget_text widget-content"><div class="textwidget custom-html-widget"><!-- GTWang Blog 側邊下方回應式 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7794009487786811" data-ad-slot="6698819038" data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></div><div class="clear"></div></div>
+</div>	
+	<div class="clear"></div>
+	
+</div> <!-- /wrapper -->
+		
+<div class="credits">
+
+<!--<div class="gtwang-footer">-->
+<!-- Begin: DFP -->
+<!-- /54009424/gtwang-bottom-2 -->
+<!--<div id='div-gpt-ad-1432250578318-6'>
+<script type='text/javascript'>
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1432250578318-6'); });
+</script>
+</div>-->
+<!-- End: DFP -->
+<!--</div>--> <!-- /gtwang-footer -->  
+
+<!-- Begin: AdSense -->
+<style>
+.gtwang-bottom-hbar { width: 320px; height: 100px; margin: auto; }
+@media(min-width: 500px) { .gtwang-bottom-hbar { width: 468px; height: 60px; } }
+@media(min-width: 800px) { .gtwang-bottom-hbar { width: 728px; height: 90px; } }
+@media(min-width: 1000px) { .gtwang-bottom-hbar { width: 970px; height: 250px; } }
+</style>
+<div style="text-align: center; width: 100%; background-color: #33363B;">
+<!-- GTWang Blog 置底大橫幅 -->
+<ins class="adsbygoogle gtwang-bottom-hbar" style="display:block" data-ad-client="ca-pub-7794009487786811" data-ad-slot="2899883335"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<!-- End: AdSense -->  
+
+	<div class="section-inner">
+		
+		<!--<a href="#" class="to-the-top" title="To the top"><div class="fa fw fa-arrow-up"></div></a>-->
+		
+		<p class="copyright">© 2018 <a href="https://blog.gtwang.org/" title="G. T. Wang — 分享 GNU/Linux 與 Open Source 技術、教學文件、程式設計技巧、統計研究與生活點滴記錄" rel="home">G. T. Wang</a></p>
+		
+	</div>
+
+</div> <!-- /credits -->
+
+<!-- Begin: Smooth Jazz Ad -->
+<!--
+<a href="http://jazz.gtwang.org/" onClick="ga('send', 'event', 'Ads', 'Click', 'Footer Ad');"><div id="smooth-jazz-ad" style="
+    height: 300px;
+    background: url(https://blog.gtwang.org/wp-content/uploads/2016/08/smooth-jazz-ad-fire-background-1.jpg) no-repeat center center fixed;
+    background-size: cover;
+"><h1 style="
+    color: #fff;
+    font-size: 4rem;
+    font-family: 'Pacifico', cursive;
+    font-weight: normal;
+    padding: 50px;
+    line-height: 1.5;
+">Smooth Jazz<sup id="beta-tag" style="
+    font-size: 20px;
+    background-color: #A00;
+    font-family: Agenda-Light, Agenda Light, Agenda, Arial Narrow, sans-serif;
+    padding: 2px 5px;
+    border-radius: 5px;
+    margin-left: 15px;
+  ">beta</sup></h1></div></a>
+-->
+<!-- End: Smooth Jazz Ad -->
+
+<script type="text/javascript" defer="defer" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/flexslider.min.js"></script>
+<script type="text/javascript" defer="defer" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/doubletaptogo.js"></script>
+<script type="text/javascript" defer="defer" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/global.min.js"></script>
+<script type="text/javascript" defer="defer" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/comment-reply.min.js"></script>
+<script type="text/javascript" async="async" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/wp-embed.min.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            //$( document ).ajaxStart(function() {
+            //});
+
+	        
+            for (var i = 0; i < document.forms.length; ++i) {
+                var form = document.forms[i];
+	            if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="TvyPFr-biZWh" value="[dryJ6XR_E24" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="aqNjepORUdo" value="tWZUs6AJEN9" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="GhtXicSV_yvnO" value="*58Ypa2Z0VcPj" />'); }
+            }
+
+            
+            $(document).on('submit', 'form', function () {
+		        if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="TvyPFr-biZWh" value="[dryJ6XR_E24" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="aqNjepORUdo" value="tWZUs6AJEN9" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="GhtXicSV_yvnO" value="*58Ypa2Z0VcPj" />'); }
+                return true;
+            });
+
+	        
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    //console.log(Object.getOwnPropertyNames(data).sort());
+                    //console.log(data.type);
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+	                    data.data.append("TvyPFr-biZWh", "[dryJ6XR_E24");
+data.data.append("aqNjepORUdo", "tWZUs6AJEN9");
+data.data.append("GhtXicSV_yvnO", "*58Ypa2Z0VcPj");
+                    }
+                    else {
+                        data.data =  data.data + '&TvyPFr-biZWh=[dryJ6XR_E24&aqNjepORUdo=tWZUs6AJEN9&GhtXicSV_yvnO=*58Ypa2Z0VcPj';
+                    }
+                }
+            });
+
+        });
+    </script>
+	
+<!-- Begin: Facebook -->
+<div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/FdM1l_dpErI.html" style="border: none;"></iframe></div></div></div>
+<!-- End: Facebook -->
+<!-- Begin: Defer JavaScript -->
+<script type="text/javascript">
+function downloadJSAtOnload() {
+var element = document.createElement("script");
+element.src = "https://blog.gtwang.org/wp-content/themes/rowling/js/defer.js";
+document.body.appendChild(element);
+}
+if (window.addEventListener)
+window.addEventListener("load", downloadJSAtOnload, false);
+else if (window.attachEvent)
+window.attachEvent("onload", downloadJSAtOnload);
+else window.onload = downloadJSAtOnload;
+</script>
+<!-- End: Defer JavaScript -->
+
+
+<!-- *´¨)
+     ¸.•´¸.•*´¨) ¸.•*¨)
+     (¸.•´ (¸.•` ¤ Comet Cache is Fully Functional ¤ ´¨) -->
+
+<!-- Cache File Version Salt:       n/a -->
+
+<!-- Cache File URL:                https://blog.gtwang.org/programming/automation-of-google-ocr-using-python-tutorial/ -->
+<!-- Cache File Path:               /cache/comet-cache/cache/https/blog-gtwang-org/programming/automation-of-google-ocr-using-python-tutorial.html -->
+
+<!-- Cache File Generated Via:      HTTP request -->
+<!-- Cache File Generated On:       Apr 9th, 2018 @ 1:41 am UTC -->
+<!-- Cache File Generated In:       0.37700 seconds -->
+
+<!-- Cache File Expires On:         Apr 16th, 2018 @ 1:41 am UTC -->
+<!-- Cache File Auto-Rebuild On:    Apr 16th, 2018 @ 1:41 am UTC -->
+
+<!-- Loaded via Cache On:    Apr 9th, 2018 @ 3:53 pm UTC -->
+<!-- Loaded via Cache In:    0.01275 seconds --><script src="./Python 使用 Google 雲端硬碟 API 自動進行文字辨識教學 - G. T. Wang_files/defer.js"></script></body></html>

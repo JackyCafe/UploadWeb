@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <tr>
+        <td>title</td>
+        <td>owner</td>
+        <td>發布日期</td>
+        <td>內容</td>
+
+        </tr>
+    {% for post in posts %}
+        <tr>
+            <td>{{ post.title }}</td>
+            <td>{{ post.owner }}</td>
+            <td>{{ post.pub_date }}</td>
+            <td>{{ post.content }}</td>
+
+        </tr>
+    {%  endfor %}
+
+    </table>
+</body>
+</html>
